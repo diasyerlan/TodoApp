@@ -10,11 +10,20 @@ import UIKit
 
 protocol AnyView {
     var presenter: AnyPresenter? { get set }
+    
+    func update(with todos: [TodoItem])
+    func update(with error: String)
 }
 
 class MainViewController: UITableViewController, AnyView {
     var presenter: AnyPresenter?
     let reuserIdentifier = "TodoCell"
+    var todoItems = [TodoItem]() {
+        didSet {
+            print("PRINTING \(todoItems)\n")
+            tableView.reloadData()
+        }
+    }
     
     lazy var createNewButton: UIButton = {
         let button = UIButton()
@@ -31,6 +40,14 @@ class MainViewController: UITableViewController, AnyView {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
+    }
+    
+    func update(with todos: [TodoItem]) {
+        self.todoItems = todos
+    }
+    
+    func update(with error: String) {
+        
     }
     
     // MARK: - Selectors
@@ -60,10 +77,11 @@ class MainViewController: UITableViewController, AnyView {
 
 extension MainViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return todoItems.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as? TodoCell else { return UITableViewCell() }
+        cell.todoItem = todoItems[indexPath.row]
         return cell
     }
     

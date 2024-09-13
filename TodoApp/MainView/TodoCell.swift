@@ -10,7 +10,20 @@ import UIKit
 
 class TodoCell: UITableViewCell {
     
-    private let titleLabel: UILabel = {
+    var todoItem: TodoItem? {
+        didSet {
+            titleLabel.text = todoItem?.title
+            if let status = todoItem?.isComplete, status {
+                statusLabel.text = "Complete"
+                statusLabel.textColor = .systemGreen
+            } else {
+                statusLabel.text = "Incomplete"
+                statusLabel.textColor = .systemRed
+            }
+        }
+    }
+    
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 24)
         label.textColor = .white

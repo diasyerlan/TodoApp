@@ -7,6 +7,12 @@
 
 import Foundation
 
-struct Todo: Codable {
-    
+struct TodoItem: Codable {
+    var title: String
+    var isComplete: Bool
+//    var id: Int
+    init(keyID: String, dictionary: [String: Any]) {
+        self.title = dictionary["title"] as? String ?? ""
+        self.isComplete = dictionary["isComplete"] as? Bool ?? false
+    }
 }
