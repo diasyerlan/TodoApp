@@ -30,10 +30,11 @@
                             <outlet property="delegate" destination="Biz-Gg-RB9" id="j0m-mF-Ybm"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="l44-Sq-FwM"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r5F-Bw-yum" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-118" y="7"/>
+            <point key="canvasLocation" x="1735.1145038167938" y="6.3380281690140849"/>
         </scene>
     </scenes>
     <resources>

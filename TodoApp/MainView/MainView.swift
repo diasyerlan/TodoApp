@@ -26,9 +26,10 @@ class MainViewController: UITableViewController, AnyView {
     
     lazy var createNewButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .red
-        button.backgroundColor = .green
-        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = UIColor(red: 30/255, green: 33/255, blue: 43/255, alpha: 1.0)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .regular, scale: .large)
+        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: largeConfig), for: .normal)
         button.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
         
         button.addTarget(self, action: #selector(createNewTodo), for: .touchUpInside)
@@ -39,6 +40,7 @@ class MainViewController: UITableViewController, AnyView {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
+
     }
     
     func update(with todos: [TodoItem]) {
@@ -57,7 +59,7 @@ class MainViewController: UITableViewController, AnyView {
     
     // MARK: - Helper Functions
     func configureTableView() {
-        view.backgroundColor = .lightGray
+        tableView.backgroundColor = UIColor(red: 58/255, green: 87/255, blue: 67/255, alpha: 1.0)
         tableView.register(TodoCell.self, forCellReuseIdentifier: reuserIdentifier)
         tableView.rowHeight = 75
         tableView.separatorColor = .systemGray3
@@ -78,6 +80,7 @@ extension MainViewController {
         return todoItems.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as? TodoCell else { return UITableViewCell() }
         cell.todoItem = todoItems[indexPath.row]
         return cell

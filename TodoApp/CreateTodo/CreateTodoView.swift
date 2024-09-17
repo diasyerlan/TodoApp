@@ -27,10 +27,12 @@ class CreateTodoViewController: UIViewController, CreateTodoView {
     }()
     
     private let itemTextField: UITextField = {
-        let textField = UITextField()
+        let textField = TextField()
         textField.textColor = .black
         textField.font = .systemFont(ofSize: 24)
         textField.backgroundColor = .white
+        textField.layer.cornerRadius = 10
+        textField.placeholder = "Enter new task..."
         return textField
     }()
     
@@ -65,6 +67,7 @@ class CreateTodoViewController: UIViewController, CreateTodoView {
     
     func configureUI() {
         view.addSubview(titleLabel)
+        view.backgroundColor = UIColor(red: 30/255, green: 33/255, blue: 43/255, alpha: 1.0)
         titleLabel.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         
         view.addSubview(itemTextField)
@@ -80,5 +83,26 @@ extension CreateTodoViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+class TextField: UITextField {
+    
+    // Set the padding (you can adjust this value as needed)
+    var textPadding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    
+    // Override placeholder rect to adjust the padding
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textPadding)
+    }
+    
+    // Override text rect to adjust the padding when not editing
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textPadding)
+    }
+    
+    // Override editing rect to adjust the padding when editing
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textPadding)
     }
 }

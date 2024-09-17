@@ -41,7 +41,7 @@ class TodoCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .darkGray
+        backgroundColor = UIColor(red: 30/255, green: 33/255, blue: 43/255, alpha: 1.0)
         
         addSubview(titleLabel)
         titleLabel.anchor(top: topAnchor, left: leftAnchor, paddingTop: 4, paddingLeft: 8)
