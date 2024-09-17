@@ -20,7 +20,6 @@ class MainViewController: UITableViewController, AnyView {
     let reuserIdentifier = "TodoCell"
     var todoItems = [TodoItem]() {
         didSet {
-            print("PRINTING \(todoItems)\n")
             tableView.reloadData()
         }
     }
@@ -53,8 +52,7 @@ class MainViewController: UITableViewController, AnyView {
     // MARK: - Selectors
     
     @objc func createNewTodo() {
-        let create = CreateTodoViewController()
-        present(create, animated: true, completion: nil)
+        presenter?.didTapCreateButton()
     }
     
     // MARK: - Helper Functions
@@ -62,7 +60,7 @@ class MainViewController: UITableViewController, AnyView {
         view.backgroundColor = .lightGray
         tableView.register(TodoCell.self, forCellReuseIdentifier: reuserIdentifier)
         tableView.rowHeight = 75
-        tableView.separatorColor = .systemRed
+        tableView.separatorColor = .systemGray3
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.tableFooterView = UIView()
         
@@ -86,6 +84,8 @@ extension MainViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let todoItem = todoItems[indexPath.row]
+        presenter?.updateItemStatus(todoId: todoItem.id, isComplete: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

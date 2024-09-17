@@ -12,6 +12,7 @@ typealias EntryPoint = AnyView & UIViewController
 protocol AnyRouter {
     var entry: EntryPoint? { get }
     static func start() -> AnyRouter
+    func navigateToCreateScreen(from view: AnyView)
 }
 
 class UserRouter: AnyRouter {
@@ -36,5 +37,11 @@ class UserRouter: AnyRouter {
         return router
     }
     
-    
+    func navigateToCreateScreen(from view: AnyView) {
+        print("Routing...")
+        let create = CreateTodoRouterImplementation.createModule()
+        if let sourceView = view as? UIViewController {
+            sourceView.present(create, animated: true, completion: nil)
+        }
+    }
 }

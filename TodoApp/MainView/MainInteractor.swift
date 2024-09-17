@@ -12,6 +12,8 @@ protocol AnyInteractor {
     var presenter: AnyPresenter? { get set }
     
     func getTodos()
+    func updateItemStatus(todoId: String, isComplete: Bool)
+
 }
 
 enum FetchError: Error {
@@ -19,6 +21,7 @@ enum FetchError: Error {
 }
 
 class MainInteractor: AnyInteractor {
+    
     var presenter: AnyPresenter?
     
     let DB_REF = Database.database().reference()
@@ -26,28 +29,39 @@ class MainInteractor: AnyInteractor {
     var allItems = [TodoItem]()
     
     func getTodos() {
-        DB_REF.child("items").observe(.childAdded) { [weak self] snapshot in
-            guard let value = snapshot.value else {
-                print("No data found in snapshot")
-                self?.presenter?.interactorDidFetchTodos(with: .failure(FetchError.noData))
-                return
+        DB_REF.child("items").queryOrdered(byChild: "isComplete").observe(.value) { [weak self] snapshot in
+            guard let self = self else { return }
+
+            // Clear the current items list
+            self.allItems.removeAll()
+
+            // Iterate over all child nodes and collect the todo items
+            for childSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let value = childSnapshot.value as? [String: Any] else {
+                    print("No data found for childSnapshot")
+                    continue
+                }
+
+                let id = childSnapshot.key
+                let todoItem = TodoItem(keyID: id, dictionary: value)
+                self.allItems.append(todoItem)
             }
-            
-            do {
-                let todoDict = try JSONSerialization.data(withJSONObject: value)
-                let todo = try JSONDecoder().decode(TodoItem.self, from: todoDict)
-                self?.allItems.append(todo)
-                self?.presenter?.interactorDidFetchTodos(with: .success(self?.allItems ?? []))
-            } catch {
-//                print("Failed to decode todo: \(error)")
-                self?.presenter?.interactorDidFetchTodos(with: .failure(FetchError.decodingFailed))
+
+            // Notify the presenter with the full list of items
+            if self.allItems.isEmpty {
+                self.presenter?.interactorDidFetchTodos(with: .failure(FetchError.noData))
+            } else {
+                self.presenter?.interactorDidFetchTodos(with: .success(self.allItems))
             }
         }
     }
-    
-    
-    
 
-    
+
+
+    func updateItemStatus(todoId: String, isComplete: Bool) {
+        let value = ["isComplete": isComplete]
+        
+        DB_REF.child("items").child(todoId).updateChildValues(value)
+    }
     
 }

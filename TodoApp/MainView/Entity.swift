@@ -10,9 +10,11 @@ import Foundation
 struct TodoItem: Codable {
     var title: String
     var isComplete: Bool
-//    var id: Int
+    var id: String
+    
     init(keyID: String, dictionary: [String: Any]) {
         self.title = dictionary["title"] as? String ?? ""
         self.isComplete = dictionary["isComplete"] as? Bool ?? false
+        self.id = keyID // Use the key from Firebase as the ID
     }
 }

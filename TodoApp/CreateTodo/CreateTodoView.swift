@@ -8,7 +8,14 @@
 import Foundation
 import UIKit
 
-class CreateTodoViewController: UIViewController {
+protocol CreateTodoView {
+    var presenter: CreateTodoPresenter? { get set}
+}
+class CreateTodoViewController: UIViewController, CreateTodoView {
+    
+    
+    var presenter: CreateTodoPresenter?
+    
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -48,8 +55,13 @@ class CreateTodoViewController: UIViewController {
     // MARK: - Selectors
     
     @objc func createItemPressed() {
-        print(itemTextField.text)
+        guard let todotext = itemTextField.text, !todotext.isEmpty else {
+            print("Todo text is empty")
+            return
+        }
+        presenter?.uploadTodoItem(text: todotext)
     }
+    
     
     func configureUI() {
         view.addSubview(titleLabel)

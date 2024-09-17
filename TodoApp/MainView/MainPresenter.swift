@@ -12,10 +12,13 @@ protocol AnyPresenter {
     var interactor: AnyInteractor? { get set }
     var view: AnyView? { get set }
     
+    func didTapCreateButton()
     func interactorDidFetchTodos(with result: Result<[TodoItem], Error>)
+    func updateItemStatus(todoId: String, isComplete: Bool)
 }
 
 class MainPresenter: AnyPresenter {
+    
     var router: AnyRouter?
     
     var interactor: AnyInteractor? {
@@ -26,8 +29,8 @@ class MainPresenter: AnyPresenter {
     
     var view: AnyView?
     
-    init() {
-        interactor?.getTodos()
+    func didTapCreateButton() {
+        router?.navigateToCreateScreen(from: view!)
     }
     
     func interactorDidFetchTodos(with result: Result<[TodoItem], Error>) {
@@ -40,7 +43,9 @@ class MainPresenter: AnyPresenter {
             view?.update(with: "Failed to fetch todos")
         }
     }
-
     
+    func updateItemStatus(todoId: String, isComplete: Bool) {
+        interactor?.updateItemStatus(todoId: todoId, isComplete: isComplete)
+    }
     
-}
+    }
